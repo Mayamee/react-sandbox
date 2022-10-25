@@ -18,7 +18,7 @@ code {
   --border: 1px solid #484a4d;
   --border-radius: 8px;
   --speed: 500ms;
-  --dropdown-width: 300px;
+  --dropdown-width: 150px;
 }
 
 ul {
@@ -47,6 +47,7 @@ a {
 }
 
 .nav-item {
+  position: relative;
   width: calc(var(--nav-size) * 0.8);
   display: flex;
   justify-content: center;
@@ -96,7 +97,7 @@ a {
   align-items: center;
   border-radius: var(--border-radius);
   transition: background var(--speed);
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   margin-bottom: 5px;
 }
 .menu-item:last-child {
@@ -105,47 +106,9 @@ a {
 .menu-item:hover {
   background-color: #525357;
 }
-
-.icon-left {
-  margin-right: 10px;
+.dropdown-right-icon {
+  margin-right: 5px;
 }
-
-.icon-right {
+.dropdown-left-icon {
   margin-left: auto;
-}
-
-.menu {
-  width: var(--dropdown-width);
-}
-
-.menu-primary-enter {
-  position: absolute;
-  transform: translateX(-110%);
-}
-.menu-primary-enter-active {
-  transform: translateX(0%);
-  transition: all var(--speed) ease;
-}
-.menu-primary-exit {
-  position: absolute;
-}
-.menu-primary-exit-active {
-  transform: translateX(-110%);
-  transition: all var(--speed) ease;
-}
-
-.menu-secondary-enter {
-  position: absolute;
-  transform: translateX(110%);
-}
-.menu-secondary-enter-active {
-  transform: translateX(0%);
-  transition: all var(--speed) ease;
-}
-.menu-secondary-exit {
-  position: absolute;
-}
-.menu-secondary-exit-active {
-  transform: translateX(110%);
-  transition: all var(--speed) ease;
 }
