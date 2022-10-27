@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMemo, useState } from "react";
 import "./App.css";
 
@@ -7,12 +8,19 @@ const App = () => {
 
   const doubleNumber = useMemo(() => slow(number), [number]);
 
-  const themeStyles = {
-    backgroundColor: darkMode ? "#333" : "#CCC",
-    color: darkMode ? "#CCC" : "#333",
-    padding: "2rem",
-    margin: "2rem",
-  };
+  const themeStyles = useMemo(
+    () => ({
+      backgroundColor: darkMode ? "#333" : "#CCC",
+      color: darkMode ? "#CCC" : "#333",
+      padding: "2rem",
+      margin: "2rem",
+    }),
+    [darkMode]
+  );
+
+  useEffect(() => {
+    console.log("Theme changed");
+  }, [themeStyles]);
 
   const handleChange = (e) => {
     setNumber(e.target.value);
