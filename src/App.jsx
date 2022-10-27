@@ -1,32 +1,39 @@
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { createContext } from "react";
-import Component from "./components/Component";
-import { ThemeProvider } from "./hooks/ThemeContext";
-export const ThemeContext = createContext();
 
-function App() {
+const App = () => {
+  const [text, setText] = useState("");
+  const renderCount = useRef(0);
+  const prevName = useRef("");
+
+  const handleChange = (e) => {
+    setText(e.target.value);
+  };
+
+  useEffect(() => {
+    renderCount.current += 1;
+  });
+
+  useEffect(() => {
+    prevName.current = text;
+  }, [text]);
+
   return (
-    <>
-      <ThemeProvider>
-        <Component />
-      </ThemeProvider>
-    </>
+    <div>
+      <input
+        type="text"
+        name="name"
+        id="id"
+        value={text}
+        onChange={handleChange}
+      />
+      <h1>{text}</h1>
+      <h2>Rendered: {renderCount.current} times</h2>
+      <h3>
+        My text is {text} and it used to be {prevName.current}
+      </h3>
+    </div>
   );
-}
+};
 
 export default App;
-
-// useEffect(() => {
-//   window.addEventListener("keyup", (e) => {
-//     if (e.key === "t") {
-//       toggleTheme();
-//     }
-//   });
-//   return () => {
-//     window.removeEventListener("keydown", (e) => {
-//       if (e.key === "t") {
-//         toggleTheme();
-//       }
-//     });
-//   };
-// }, []);
