@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useId } from "react";
 import "./App.css";
 import ListItem from "./components/ListItem";
 
@@ -12,15 +12,16 @@ const App = () => {
   const [text, setText] = useState("");
   const [count, setCount] = useState(0);
   const [mode, setMode] = useState(false);
-
+  const ID_01 = useId();
+	const ID_02 = useId();
+	const ID_03 = useId();
   const listContent = useMemo(() => getList(count, text), [count, text]);
-	// на каждый рендер не срабатывает, только при изменении count или text
+  // на каждый рендер не срабатывает, только при изменении count или text
 
   const clickHandler = useCallback((e) => {
     console.log(`Clicked on ${e.target.innerText}`);
   }, []);
-	// инициализируется только при первом рендере или добавлении нового элемента в массив
-
+  // инициализируется только при первом рендере или добавлении нового элемента в массив
 
   const themeStyle = {
     backgroundColor: mode ? "black" : "white",
@@ -38,12 +39,17 @@ const App = () => {
       >
         Clear List
       </button>
-      <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <input
         type="number"
         value={count}
         onChange={(e) => setCount(saturation(0, 500, +e.target.value))}
       />
+      <div className="id">{ID_01}-{ID_02}-{ID_03}</div>
       <ul className="list" style={themeStyle}>
         {listContent.map((item) => (
           <ListItem key={item} text={item} onClick={clickHandler} />
