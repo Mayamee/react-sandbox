@@ -1,66 +1,55 @@
-import { useEffect } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import "./App.css";
+import ListItem from "./components/ListItem";
+
+const getList = (n, t) => new Array(n).fill().map((_, i) => `${t}-${i + 1}`);
+
+const saturation = (min, max, value) => {
+  return Math.min(Math.max(value, min), max);
+};
 
 const App = () => {
-  const [number, setNumber] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [text, setText] = useState("");
+  const [count, setCount] = useState(0);
+  const [mode, setMode] = useState(false);
 
-  const doubleNumber = useMemo(() => slow(number), [number]);
+  const listContent = useMemo(() => getList(count, text), [count, text]);
+	// на каждый рендер не срабатывает, только при изменении count или text
 
-  const themeStyles = useMemo(
-    () => ({
-      backgroundColor: darkMode ? "#333" : "#CCC",
-      color: darkMode ? "#CCC" : "#333",
-      padding: "2rem",
-      margin: "2rem",
-    }),
-    [darkMode]
-  );
+  const clickHandler = useCallback((e) => {
+    console.log(`Clicked on ${e.target.innerText}`);
+  }, []);
+	// инициализируется только при первом рендере или добавлении нового элемента в массив
 
-  useEffect(() => {
-    console.log("Theme changed");
-  }, [themeStyles]);
 
-  const handleChange = (e) => {
-    setNumber(e.target.value);
+  const themeStyle = {
+    backgroundColor: mode ? "black" : "white",
+    color: mode ? "white" : "black",
   };
+
   return (
     <div className="App">
-      <h1>My App</h1>
-      <div className="box" style={themeStyles}>
-        <input
-          type="number"
-          value={number}
-          placeholder="some text"
-          onChange={handleChange}
-        />
-        <div
-          className="result"
-          style={{
-            display: "inline-block",
-          }}
-        >
-          Result is: {doubleNumber}
-        </div>
-
-        <button
-          style={{
-            display: "block",
-            marginTop: "1rem",
-          }}
-          onClick={() => setDarkMode((prevMode) => !prevMode)}
-        >
-          Toggle Mode
-        </button>
-      </div>
+      <button onClick={() => setMode((prev) => !prev)}>Toggle Theme</button>
+      <button
+        onClick={() => {
+          setText("");
+          setCount(0);
+        }}
+      >
+        Clear List
+      </button>
+      <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+      <input
+        type="number"
+        value={count}
+        onChange={(e) => setCount(saturation(0, 500, +e.target.value))}
+      />
+      <ul className="list" style={themeStyle}>
+        {listContent.map((item) => (
+          <ListItem key={item} text={item} onClick={clickHandler} />
+        ))}
+      </ul>
     </div>
   );
 };
 export default App;
-
-function slow(number) {
-  console.log("Calling slow function");
-  for (let i = 0; i < 2; i++) for (let i = 0; i <= 5e8; i++) {}
-  return number * 2;
-}
